@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class forceslider : MonoBehaviour
+public class ForceSlider : MonoBehaviour
 {
-    // Start is called before the first frame update
-
-    public Slider forceSlider;
-    void Start()
+    public static ForceSlider Instance;
+    
+    private const float MaxForce = 10;
+    public Slider slider;
+    void Awake()
     {
-        
+        Instance = this;
+        slider.maxValue = MaxForce;
     }
 
-    // Update is called once per frame
-    void Update()
+    public float GetValue()
     {
-        Debug.Log(forceSlider.value);
+        return this.slider.value;
     }
 }
