@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -29,9 +30,9 @@ public class GameManager : MonoBehaviour
             this._activateBall = this.activateBall;
         }
 
-        Ball fireFunc = (Ball)this._activateBall.GetComponent(typeof(Ball));
+        RoundBall fireFunc = (RoundBall)this._activateBall.GetComponent(typeof(RoundBall));
         
         
-        fireFunc.Fire(ForceSlider.Instance.GetValue());
+        fireFunc.Fire(ForceSlider.Instance.GetValue(),Vector2.zero);
     }
 }
