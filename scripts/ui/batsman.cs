@@ -1,45 +1,50 @@
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Batsman : MonoBehaviour
+public class Batsman : MonoBehaviour, IPointerClickHandler
 {
-    // Start is called before the first frame update
 
-    [Header("Debug")]
-    [Range(-1,1)]public float forceToTorqueRate;
-    
-    
-    [Header("Debug show")]
-    [SerializeField]private double torque;
+    private Vector2 _aimPoint = Vector2.zero;
+    public static Batsman Instance;
 
-
-    [Header("Properties")] [Range(0, 10)] 
-    public double force;
-
-    private Rigidbody _rigidBodyOfBall;
-    private GameObject _activeBall;
-    private Transform _transform;
-
-    void Start()
+    private void Awake()
     {
-        this._transform = this.GameObject().GetComponent<Transform>();
+        Instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public Vector2 GetAimPoint()
     {
-        this.torque = this.force * this.forceToTorqueRate;
-        
+        return this._aimPoint;
     }
 
-    private void OnMouseDown()
+    public void ResetAimPoint()
     {
-        Vector3 centerOfBatsman = this._transform.position;
-        Vector3 mousePosition = Input.mousePosition;
-        Debug.Log(mousePosition);
-        Debug.Log(centerOfBatsman);
+        this._aimPoint = Vector2.zero;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left) // Check for left mouse button
+        {
+            // Get the position where the click occurred relative to the UI element
+            Vector2 localCursor;
+            RectTransform rectTransform = GetComponent<RectTransform>();
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                rectTransform, 
+                eventData.position,
+                eventData.pressEventCamera,
+                out localCursor);
+
+            Vector2 normalizedPosition = new Vector2(
+                localCursor.x / (rectTransform.rect.width / 2),
+                localCursor.y / (rectTransform.rect.height / 2));
+
+            // Now normalizedPosition contains the position within the UI element in 0-1 range
+            Debug.Log("Normalized Position: " + normalizedPosition);
+            this._aimPoint = normalizedPosition;
+        }
     }
 }

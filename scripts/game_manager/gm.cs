@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
         RoundBall fireFunc = (RoundBall)this._activateBall.GetComponent(typeof(RoundBall));
         
-        
-        fireFunc.Fire(ForceSlider.Instance.GetValue(),Vector2.zero);
+        fireFunc.Fire(ForceSlider.Instance.GetValue(),Batsman.Instance.GetAimPoint());
+        Batsman.Instance.ResetAimPoint();
     }
 }
