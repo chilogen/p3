@@ -262,14 +262,14 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 85079c67d447947e497af39995e5f9ad, type: 3}
   m_PrefabInstance: {fileID: 267166776}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &30425462
+--- !u!64 &30425466
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 30425458}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: ac5f870c859484ab2b92343a438e97af, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -430,7 +430,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 85079c67d447947e497af39995e5f9ad, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 30425462}
+      addedObject: {fileID: 30425466}
   m_SourcePrefab: {fileID: 100100000, guid: 85079c67d447947e497af39995e5f9ad, type: 3}
 --- !u!1 &278682343
 GameObject:
@@ -1547,7 +1547,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &2122033706
 MonoBehaviour:
   m_ObjectHideFlags: 0
