@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -6,15 +7,23 @@ public class Batsman : MonoBehaviour, IPointerClickHandler
 {
 
     private Vector2 _aimPoint = Vector2.zero;
+    private Image _pointImage;
+    private RectTransform _selfTransform;
+    
     public static Batsman Instance;
-    public Image pointPrefab; // Assign a prefab of the point (UI Image)
-    public Canvas canvas; // Assign the canvas where the points should be drawn
+    public Image pointPrefab;
 
     private void Awake()
     {
         Instance = this;
+        _selfTransform = GetComponent<RectTransform>();
+        
+        _pointImage = Instantiate(pointPrefab, _selfTransform);
+        _pointImage.rectTransform.localScale = _selfTransform.localScale * 0.15f;
+        _pointImage.rectTransform.anchoredPosition = new Vector2(0,0);
     }
 
+    //the origin point at the center and range [-0.5, 0.5]
     public Vector2 GetAimPoint()
     {
         return this._aimPoint;
@@ -27,29 +36,19 @@ public class Batsman : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Image point = Instantiate(pointPrefab, canvas.transform);
-        Vector2 localPoint;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, eventData.position, canvas.worldCamera, out localPoint);
-        point.rectTransform.anchoredPosition = localPoint;
         if (eventData.button == PointerEventData.InputButton.Left) // Check for left mouse button
         {
-            // Get the position where the click occurred relative to the UI element
             Vector2 localCursor;
-            RectTransform rectTransform = GetComponent<RectTransform>();
-
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                rectTransform, 
+                _selfTransform,
                 eventData.position,
                 eventData.pressEventCamera,
                 out localCursor);
 
-            Vector2 normalizedPosition = new Vector2(
-                localCursor.x / (rectTransform.rect.width / 2),
-                localCursor.y / (rectTransform.rect.height / 2));
+            _pointImage.rectTransform.anchoredPosition = localCursor;
 
-            // Now normalizedPosition contains the position within the UI element in 0-1 range
-            Debug.Log("Normalized Position: " + normalizedPosition);
-            this._aimPoint = normalizedPosition;
+            this._aimPoint.x = localCursor.x / _selfTransform.rect.width;
+            this._aimPoint.y = localCursor.y / _selfTransform.rect.height;
         }
     }
 }
