@@ -6,17 +6,16 @@ using UnityEngine;
 
 namespace march3
 {
-    public class game_manager : MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
-    
-        public GirdManager GirdManager;
         
-        private List<string> _tags = new List<string>{"Red", "Blue", "Yellow", "Green", "Purple"};
-        private List<int> _scores = new List<int>{1,2,4,8,16};
-        private PieObjPool _piePool = new PieObjPool();
-    
         void Start()
         {
+            GirdManager.Instance.Init();
+            PieObjPool.Instance.Init();
+            PieLauncher.Instance.Start(this.transform.position);
+            InputManager.RegisterLaunchHandler(HandleLaunch);
+            
             StartCoroutine(ScheduleWorker());
         }
     
@@ -25,22 +24,22 @@ namespace march3
             while (true)
             {
                 yield return new WaitForSeconds(3);
-                worker();
+                GirdManager.Instance.Next();
             }
         }
-    
-        void worker()
+
+        private static void HandleLaunch()
         {
-            this.GirdManager.Next();
-            PieBall newPie = _piePool.Get();
-            newPie.GetRigidbody().AddForce(new Vector3(0, 0, 0), ForceMode.VelocityChange);
+            var forceDirection = InputManager.GetDragDirection();
+            PieLauncher.Instance.Launch(forceDirection, 1.1f);
         }
+
     
         void OnCollider(PieBall move)
         {
-            Vector2 gridPosition = this.GirdManager.NearestGrid(move.Get().transform);
-            GirdPosition gird = this.GirdManager.Set(move.Get(), gridPosition);
-            gird.Pull();
+            Vector2 gridPosition = GirdManager.Instance.NearestGrid(move.Get().transform);
+            // GridPoint gird = GirdManager.Set(move.Get(), gridPosition);
+            // gird.Pull();
         }
     }
 }

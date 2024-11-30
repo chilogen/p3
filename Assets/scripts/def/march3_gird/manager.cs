@@ -1,80 +1,82 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 
 namespace march3
 {
-    
-public class GirdManager:MonoBehaviour
-{
-    public GirdPosition girdPrefab;
-    
-    
-    private const int _width = 15, _height = 20;
-    private GirdPosition[,] _grid;
 
-    void Start()
+    public class GirdManager
     {
-        _grid = new GirdPosition[_width, _height];
-        for (int x = 0; x < _width; x++)
+
+
+        private const int Width = 15, Height = 23;
+        private  GridPoint[,] _grid;
+        public static readonly GirdManager Instance = new ();
+
+        public void Init()
         {
-            for (int y = 0; y < _height; y++)
+            _grid = new GridPoint[Height, Width];
+            var prefab = Resources.Load("march3/position_point");
+            if (prefab == null)
             {
-                _grid[x, y] = Instantiate(girdPrefab);
+                Debug.Log("Prefab loaded error");
+                return;
             }
-        }
-    }
 
-    public GirdPosition Set(GameObject obj, Vector2 position)
-    {
-        int x = (int)position.x, y = (int)position.y;
-        if (x < 0 || x >= _width || y < 0 || y >= _height)
-        {
-            return null;
-        }
-
-        if (_grid[x, y] != null)
-        {
-            return null;
-        }
-
-        if (_grid[x, y].Set(obj))
-        {
-            return _grid[x, y];
-        }
-
-        return null;
-    }
-
-    public bool Next()
-    {
-        for (int i = 0; i < _width; i++)
-        {
-            if (_grid[_width - 1,i] != null)
+            for (var x = 0; x < Width; x++)
             {
-                return false;
+                for (var y = 0; y < Height; y++)
+                {
+                    _grid[y,x] = Object.Instantiate(prefab,new Vector3(-10*y,-12,10*x),Quaternion.identity).GetComponent<GridPoint>();
+                }
             }
         }
 
-        for (int i = _height-1; i > 0; i--)
+        public GridPoint GetGirdPoint(Vector2 position)
         {
-            for (int j = 0; j < _width; j++)
+            int x = (int)position.x, y = (int)position.y;
+            if (x < 0 || x >= Width || y < 0 || y >= Height)
             {
-                _grid[i,j]=_grid[i-1,j];
+                return null;
             }
+
+            return _grid[y, x];
         }
 
-        for (int i = 0; i < _width; i++)
+        public bool Next()
         {
-            _grid[0, 1] = null;
+            //failed on final line have obj
+            for (var i = 0; i < Width; i++)
+            {
+                if (_grid[Height-1,i] .Occupy()!= null)
+                {
+                    return false;
+                }
+            }
+
+            //move obj to next line
+            for (var i = Height - 1; i > 0; i--)
+            {
+                for (int j = 0; j < Width; j++)
+                {
+                    _grid[i,j].SwapSon(_grid[i-1,j]);
+                }
+            }
+
+            //new first line
+            for (var i = 0; i < Width; i++)
+            {
+                _grid[0,i].RemoveSon();
+                var newPie = PieObjPool.Instance.Get(null);
+                _grid[0,i].SetSon(newPie);
+            }
+
+            return true;
         }
 
-        return true;
+        public Vector2 NearestGrid(Transform transform)
+        {
+            return new Vector2(1, 1);
+        }
     }
-
-    public Vector2 NearestGrid(Transform transform)
-    {
-        return new Vector2(1, 1);
-    }
-}
-
 }

@@ -19,6 +19,10 @@ namespace march3
         {
             this._tag = tag != "random" ? tag : this._tags[UnityEngine.Random.Range(0, this._tags.Count)];
             this._score = score != -1 ? score : this._scores[UnityEngine.Random.Range(0, _scores.Count)];
+            if (ReferenceEquals(_rigidbody, null))
+            {
+                this._rigidbody = this.GetComponent<Rigidbody>();
+            }
         }
 
         public GameObject Get()
