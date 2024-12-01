@@ -21,6 +21,7 @@ namespace march3
 
         public PieBall Launch(Vector3 direction, float force)
         {
+            Debug.Log(direction.ToString());
             if (this._bullet == null)
             {
                 Debug.Log("call init before using launcher");
@@ -33,7 +34,7 @@ namespace march3
                 Debug.Log("Cannot launch because no bullet attached");
                 return null;
             }
-            rb.AddForce(direction * 10);
+            rb.AddForce(direction * Config.Instance.DebugConfig.Force, ForceMode.Impulse);
             var obj = this._bullet;
             this._bullet = PieObjPool.Instance.Get(_startPos);
             return obj;

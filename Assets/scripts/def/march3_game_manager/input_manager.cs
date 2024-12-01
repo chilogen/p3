@@ -13,7 +13,12 @@ namespace march3
 
         public static Vector3 GetDragDirection()
         {
-            return _endPos - _startPos;
+            var dragVector = _endPos - _startPos;
+            var forceDirection = new Vector3(dragVector.x, 0, dragVector.y).normalized;
+            var worldForceDirection = Camera.main.transform.TransformDirection(forceDirection);
+            worldForceDirection.y = 0;
+            worldForceDirection.Normalize();
+            return worldForceDirection;
         }
 
         public static void SetStart(Vector3 position)
