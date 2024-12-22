@@ -10,6 +10,7 @@ namespace march3
 
         private string _tag;
         private int _score;
+        private bool _rotate;
         private List<string> _tags = new List<string> { "Red", "Blue", "Yellow", "Green", "Purple" };
         private List<int> _scores = new List<int> { 1, 2, 4, 8, 16 };
         private Rigidbody _rigidbody;
@@ -28,6 +29,20 @@ namespace march3
         public GameObject Get()
         {
             return this.gameObject;
+        }
+
+        public void Rotate(bool rotate)
+        {
+            if (rotate == _rotate)return;
+            _rotate  = rotate;
+            if (rotate)
+            {
+                _rigidbody.AddTorque(transform.up * Config.Instance.DebugConfig.pieRotateSpeed,ForceMode.Impulse);
+            }
+            else
+            {
+                _rigidbody.angularVelocity = Vector3.zero;
+            }
         }
 
         public string GetTag()
@@ -54,7 +69,6 @@ namespace march3
         // Update is called once per frame
         void Update()
         {
-        
         }
     }
 }

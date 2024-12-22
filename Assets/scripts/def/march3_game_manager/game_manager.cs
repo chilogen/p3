@@ -24,7 +24,8 @@ namespace march3
             while (true)
             {
                 yield return new WaitForSeconds(3);
-                GirdManager.Instance.Next();
+                // GirdManager.Instance.Next();
+                PieLauncher.Instance.NewBall();
             }
         }
 

@@ -28,15 +28,16 @@ namespace march3
         private void OnEnable()
         {
             this.DebugConfig = new();
-            this.DebugConfig.Force = 100;
         }
     }
 
     [System.Serializable]
     public class DebugConfig
     {
-        public int Force;
-
+        public float pieRotateSpeed;
+        public float maxHoldMillSeconds;
+        public float maxForwardForce;
+        public float maxUpwardForce;
     }
 
 }

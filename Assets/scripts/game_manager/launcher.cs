@@ -19,6 +19,15 @@ namespace march3
             this._bullet = PieObjPool.Instance.Get(_startPos);
         }
 
+        public void NewBall()
+        {
+            if (_bullet != null)
+            {
+                return;
+            }
+            _bullet = PieObjPool.Instance.Get(_startPos);
+        }
+
         public PieBall Launch(Vector3 direction, float force)
         {
             Debug.Log(direction.ToString());
@@ -34,9 +43,10 @@ namespace march3
                 Debug.Log("Cannot launch because no bullet attached");
                 return null;
             }
-            rb.AddForce(direction * Config.Instance.DebugConfig.Force, ForceMode.Impulse);
+            rb.AddForce(direction, ForceMode.Impulse);
+            this._bullet.Rotate(true);
             var obj = this._bullet;
-            this._bullet = PieObjPool.Instance.Get(_startPos);
+            this._bullet = null;
             return obj;
         }
     }

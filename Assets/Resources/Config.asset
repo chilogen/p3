@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: Config
   m_EditorClassIdentifier: 
   DebugConfig:
-    Force: 150
+    pieRotateSpeed: 50
+    maxHoldMillSeconds: 1000
+    maxForwardForce: 200
+    maxUpwardForce: 30
